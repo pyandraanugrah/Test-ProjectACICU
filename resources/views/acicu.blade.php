@@ -38,20 +38,27 @@ FILE: index.html
         </div>
       </div>
 
-      <nav class="nav-menu" id="navMenu">
-        <a data-target="home" class="nav-link active">Home</a>
-        <a data-target="menu" class="nav-link">Menu</a>
+      <div class="nav-actions">
+        <nav class="nav-menu" id="navMenu">
+          <a data-target="home" class="nav-link active">Home</a>
+          <a data-target="menu" class="nav-link">Menu</a>
 
-        <div class="separator"></div>
+          <div class="separator"></div>
 
-        <a data-target="about" class="nav-link">About Us</a>
-        <a data-target="contact" class="nav-link">Contact</a>
-      </nav>
+          <a data-target="about" class="nav-link">About Us</a>
+          <a data-target="contact" class="nav-link">Contact</a>
+        </nav>
 
-      <div class="hamburger" id="hamburger">
-        <span></span>
-        <span></span>
-        <span></span>
+        <button class="nav-cart-btn" id="cartToggleBtn" aria-label="Buka Keranjang Belanja" type="button">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span class="nav-cart-badge" id="cartBadge">0</span>
+        </button>
+
+        <div class="hamburger" id="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
       </div>
     </header>
 
@@ -182,6 +189,10 @@ FILE: index.html
                 khas yang cocok dinikmati sebagai teman bersantai ataupun
                 camilan sehari-hari
               </p>
+
+              <button type="button" class="btn-menu-cart" onclick="addToCart('ciweng')">
+                <i class="fa-solid fa-cart-plus"></i> Tambah ke Keranjang
+              </button>
             </div>
 
             <div class="side-circle right">
@@ -207,6 +218,10 @@ FILE: index.html
                 lezat. Disajikan fresh setiap hari dengan perpaduan rasa yang
                 nikmat.
               </p>
+
+              <button type="button" class="btn-menu-cart" onclick="addToCart('molachee')">
+                <i class="fa-solid fa-cart-plus"></i> Tambah ke Keranjang
+              </button>
             </div>
 
             <div class="side-circle right">
@@ -231,6 +246,10 @@ FILE: index.html
                 Camilan gurih dengan tekstur renyah di luar dan lembut di dalam.
                 Cocok dinikmati saat santai bersama teman maupun keluarga.
               </p>
+
+              <button type="button" class="btn-menu-cart" onclick="addToCart('cilukba')">
+                <i class="fa-solid fa-cart-plus"></i> Tambah ke Keranjang
+              </button>
             </div>
 
             <div class="side-circle right">
@@ -241,7 +260,7 @@ FILE: index.html
       </div>
 
       <!-- PRICE -->
-      <div class="price">Rp10.000</div>
+      <div class="price" id="menuPriceBtn" title="Klik untuk tambah ke keranjang" onclick="addActiveMenuToCart()">Rp10.000</div>
     </section>
     <!-- =========================
        ABOUT
@@ -358,6 +377,54 @@ FILE: index.html
 
       <div class="copyright">© 2026 . ACICU Food</div>
     </footer>
+
+    <!-- =========================
+       SHOPPING CART DRAWER
+    ========================= -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+
+    <aside class="cart-drawer" id="cartDrawer" aria-label="Keranjang Belanja">
+      <div class="cart-header">
+        <div class="cart-header-title">
+          <i class="fa-solid fa-bag-shopping"></i>
+          <span>Keranjang Belanja</span>
+          <span class="cart-count-pill" id="cartCountPill">0 item</span>
+        </div>
+        <button class="cart-close-btn" id="cartCloseBtn" aria-label="Tutup Keranjang" type="button">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="cart-items" id="cartItemsList">
+        <!-- Rendered dynamically by script.js -->
+      </div>
+
+      <div class="cart-footer" id="cartFooter">
+        <div class="cart-subtotal-row">
+          <span class="cart-subtotal-label">Subtotal Pesanan:</span>
+          <span class="cart-subtotal-amount" id="cartSubtotalAmount">Rp 0</span>
+        </div>
+        <p class="cart-fresh-note">
+          *Pengiriman fresh drop dijadwalkan sesuai kuota batch pre-order hari ini.
+        </p>
+
+        <a href="{{ url('/checkout') }}" class="btn-cart-checkout" id="btnCartCheckout">
+          <span>Lanjut Checkout</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </a>
+
+        <a href="#" target="_blank" class="btn-cart-whatsapp" id="btnCartWhatsApp">
+          <i class="fa-brands fa-whatsapp"></i>
+          <span>Kirim Format Order ke WhatsApp</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- TOAST FEEDBACK -->
+    <div class="cart-toast" id="cartToast">
+      <i class="fa-solid fa-circle-check"></i>
+      <span id="cartToastText">Item berhasil ditambahkan ke keranjang</span>
+    </div>
 
     <!-- JS -->
     <script src="{{ asset('js/script.js') }}"></script>

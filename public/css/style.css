@@ -101,6 +101,57 @@ NAVBAR
   background:#ffb4c9;
 }
 
+.nav-actions{
+  display:flex;
+  align-items:center;
+  gap:24px;
+}
+
+.nav-cart-btn{
+  position:relative;
+  background:transparent;
+  border:none;
+  cursor:pointer;
+  color:var(--pink);
+  font-size:2.4rem;
+  padding:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  line-height:1;
+  transition:transform .2s ease, color .2s ease;
+}
+
+.nav-cart-btn:hover{
+  transform:scale(1.08);
+  color:#e0457b;
+}
+
+.nav-cart-badge{
+  position:absolute;
+  top:-2px;
+  right:-6px;
+  background:var(--pink);
+  color:#ffffff;
+  font-family:'Poppins', sans-serif;
+  font-size:1.1rem;
+  font-weight:700;
+  min-width:20px;
+  height:20px;
+  border-radius:999px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 5px;
+  border:2px solid #ffffff;
+  box-shadow:0 2px 6px rgba(249,91,143,.45);
+  transition:transform .25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.nav-cart-badge.bump{
+  transform:scale(1.3);
+}
+
 .hamburger{
   display:none;
   flex-direction:column;
@@ -1199,6 +1250,15 @@ NAVBAR
     text-align:center;
   }
 
+  .nav-actions{
+    gap:14px;
+  }
+
+  .nav-cart-btn{
+    font-size:2rem;
+    padding:6px;
+  }
+
 }
 
 /* =========================
@@ -1564,4 +1624,521 @@ LARGE DESKTOP
     margin:auto;
   }
 
+}
+
+/* ========================================================
+   SHOPPING CART DRAWER & UI ENHANCEMENTS
+   Crafted strictly following reference: home (1).png
+======================================================== */
+
+/* Overlay */
+.cart-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.45);
+  backdrop-filter:blur(3px);
+  -webkit-backdrop-filter:blur(3px);
+  z-index:1000;
+  opacity:0;
+  visibility:hidden;
+  transition:opacity .3s ease, visibility .3s ease;
+}
+
+.cart-overlay.open{
+  opacity:1;
+  visibility:visible;
+}
+
+/* Drawer Container */
+.cart-drawer{
+  position:fixed;
+  top:0;
+  right:0;
+  bottom:0;
+  width:min(430px, 92vw);
+  height:100vh;
+  height:100dvh;
+  background:#ffffff;
+  z-index:1001;
+  box-shadow:-10px 0 35px rgba(0,0,0,0.18);
+  display:flex;
+  flex-direction:column;
+  transform:translateX(100%);
+  transition:transform .35s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing:border-box;
+}
+
+.cart-drawer.open{
+  transform:translateX(0);
+}
+
+/* Header */
+.cart-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:20px 22px;
+  border-bottom:1px solid #f1f1f3;
+  background:#ffffff;
+  flex-shrink:0;
+}
+
+.cart-header-title{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:1.6rem;
+  font-weight:700;
+  color:#111111;
+  font-family:'Poppins', sans-serif;
+}
+
+.cart-header-title i{
+  color:var(--pink);
+  font-size:1.8rem;
+}
+
+.cart-count-pill{
+  background:#fff0f5;
+  color:var(--pink);
+  font-size:1.15rem;
+  font-weight:600;
+  padding:2px 10px;
+  border-radius:999px;
+  border:1px solid #ffd6e4;
+}
+
+.cart-close-btn{
+  background:#f5f5f7;
+  border:none;
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  color:#666666;
+  font-size:1.6rem;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition:background .2s, color .2s, transform .2s;
+}
+
+.cart-close-btn:hover{
+  background:#eaeaea;
+  color:#111111;
+  transform:rotate(90deg);
+}
+
+/* Scrollable Items List */
+.cart-items{
+  flex:1;
+  overflow-y:auto;
+  padding:16px 18px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  background:#fbfbfb;
+}
+
+.cart-items::-webkit-scrollbar{
+  width:6px;
+}
+
+.cart-items::-webkit-scrollbar-track{
+  background:transparent;
+}
+
+.cart-items::-webkit-scrollbar-thumb{
+  background:#ffd1df;
+  border-radius:999px;
+}
+
+/* Cart Item Card - Matches home (1).png */
+.cart-item-card{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  background:#ffffff;
+  border:1px solid #eeeeee;
+  border-radius:16px;
+  padding:12px 14px;
+  position:relative;
+  box-shadow:0 2px 8px rgba(0,0,0,0.03);
+  transition:transform .2s ease, box-shadow .2s ease, opacity .25s ease;
+}
+
+.cart-item-card:hover{
+  box-shadow:0 4px 14px rgba(249,91,143,0.09);
+  border-color:#fbd6e3;
+}
+
+.cart-item-img{
+  width:56px;
+  height:56px;
+  border-radius:12px;
+  object-fit:contain;
+  background:#fff5f8;
+  padding:4px;
+  flex-shrink:0;
+  border:1px solid #fce4ec;
+}
+
+.cart-item-info{
+  flex:1;
+  min-width:0;
+  padding-right:48px;
+}
+
+.cart-item-name{
+  font-size:1.45rem;
+  font-weight:700;
+  color:#1a1a1a;
+  margin-bottom:2px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  font-family:'Poppins', sans-serif;
+}
+
+.cart-item-unit{
+  font-size:1.15rem;
+  color:#8c8c8c;
+  margin-bottom:3px;
+  font-family:'Poppins', sans-serif;
+}
+
+.cart-item-total{
+  font-size:1.35rem;
+  font-weight:700;
+  color:var(--pink);
+  font-family:'Poppins', sans-serif;
+}
+
+/* Trash Icon (Top-Right) */
+.cart-item-delete{
+  position:absolute;
+  top:10px;
+  right:12px;
+  background:transparent;
+  border:none;
+  color:#ef4444;
+  font-size:1.35rem;
+  cursor:pointer;
+  width:26px;
+  height:26px;
+  border-radius:6px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:background .2s, transform .2s, color .2s;
+}
+
+.cart-item-delete:hover{
+  background:#fee2e2;
+  color:#dc2626;
+  transform:scale(1.12);
+}
+
+/* Quantity Control Pill (Bottom-Right) */
+.cart-qty-control{
+  position:absolute;
+  bottom:10px;
+  right:12px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  background:#f4f4f6;
+  border-radius:999px;
+  border:1px solid #e5e5ea;
+  padding:2px 8px;
+}
+
+.qty-btn{
+  background:transparent;
+  border:none;
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  color:#444444;
+  font-size:1.4rem;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition:background .15s, color .15s, transform .1s;
+  line-height:1;
+}
+
+.qty-btn:hover{
+  background:#ffffff;
+  color:var(--pink);
+  box-shadow:0 1px 3px rgba(0,0,0,0.12);
+}
+
+.qty-btn:active{
+  transform:scale(0.88);
+}
+
+.qty-number{
+  font-size:1.25rem;
+  font-weight:700;
+  color:#111111;
+  min-width:16px;
+  text-align:center;
+  font-family:'Poppins', sans-serif;
+}
+
+/* Empty State */
+.cart-empty-state{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:50px 20px;
+  margin:auto 0;
+}
+
+.cart-empty-icon{
+  width:72px;
+  height:72px;
+  border-radius:50%;
+  background:#fff0f5;
+  color:var(--pink);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:2.8rem;
+  margin-bottom:14px;
+  border:1px solid #ffd6e4;
+}
+
+.cart-empty-state h3{
+  font-size:1.65rem;
+  color:#222222;
+  font-weight:700;
+  margin-bottom:6px;
+}
+
+.cart-empty-state p{
+  font-size:1.25rem;
+  color:#777777;
+  margin-bottom:18px;
+}
+
+.btn-browse-menu{
+  background:var(--pink);
+  color:#ffffff;
+  padding:10px 24px;
+  border-radius:999px;
+  font-weight:600;
+  font-size:1.3rem;
+  border:none;
+  cursor:pointer;
+  transition:transform .2s, box-shadow .2s;
+  text-decoration:none;
+}
+
+.btn-browse-menu:hover{
+  transform:translateY(-2px);
+  box-shadow:0 4px 12px rgba(249,91,143,0.4);
+}
+
+/* Footer - Exactly matches home (1).png */
+.cart-footer{
+  border-top:1px solid #eeeeee;
+  padding:16px 20px 22px;
+  background:#ffffff;
+  box-shadow:0 -4px 18px rgba(0,0,0,0.04);
+  flex-shrink:0;
+}
+
+.cart-subtotal-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:4px;
+}
+
+.cart-subtotal-label{
+  font-size:1.35rem;
+  color:#555555;
+  font-weight:500;
+  font-family:'Poppins', sans-serif;
+}
+
+.cart-subtotal-amount{
+  font-size:1.9rem;
+  font-weight:800;
+  color:#111111;
+  font-family:'Poppins', sans-serif;
+}
+
+.cart-fresh-note{
+  font-size:1.1rem;
+  color:#888888;
+  margin-bottom:14px;
+  line-height:1.4;
+  font-style:italic;
+  font-family:'Poppins', sans-serif;
+}
+
+/* Button Lanjut Checkout */
+.btn-cart-checkout{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  background:linear-gradient(135deg, #ff5b8a 0%, #f95b8f 100%);
+  color:#ffffff;
+  font-size:1.45rem;
+  font-weight:700;
+  padding:13px 20px;
+  border-radius:999px;
+  border:none;
+  text-decoration:none;
+  cursor:pointer;
+  box-shadow:0 4px 16px rgba(249,91,143,0.38);
+  transition:transform .18s ease, box-shadow .18s ease;
+  font-family:'Poppins', sans-serif;
+  box-sizing:border-box;
+}
+
+.btn-cart-checkout:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 20px rgba(249,91,143,0.48);
+}
+
+.btn-cart-checkout:active{
+  transform:scale(0.98);
+}
+
+/* Button Kirim Format Order ke WhatsApp */
+.btn-cart-whatsapp{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  background:#0f763e;
+  color:#ffffff;
+  font-size:1.35rem;
+  font-weight:600;
+  padding:12px 20px;
+  border-radius:999px;
+  border:none;
+  cursor:pointer;
+  margin-top:9px;
+  box-shadow:0 3px 12px rgba(15,118,62,0.28);
+  transition:background .2s ease, transform .18s ease;
+  font-family:'Poppins', sans-serif;
+  text-decoration:none;
+  box-sizing:border-box;
+}
+
+.btn-cart-whatsapp:hover{
+  background:#0b5f31;
+  transform:translateY(-1px);
+}
+
+.btn-cart-whatsapp:active{
+  transform:scale(0.98);
+}
+
+/* Menu Add to Cart Button */
+.btn-menu-cart{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  margin-top:16px;
+  padding:10px 22px;
+  background:var(--pink);
+  color:#ffffff;
+  border:none;
+  border-radius:999px;
+  font-size:1.35rem;
+  font-weight:600;
+  font-family:'Poppins', sans-serif;
+  cursor:pointer;
+  box-shadow:0 4px 14px rgba(249,91,143,0.35);
+  transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+
+.btn-menu-cart:hover{
+  background:#e2477c;
+  transform:translateY(-2px);
+  box-shadow:0 6px 18px rgba(249,91,143,0.45);
+}
+
+.price{
+  cursor:pointer;
+  transition:transform .2s ease, box-shadow .2s ease;
+}
+
+.price:hover{
+  transform:translateX(-50%) scale(1.03);
+  box-shadow:0 8px 24px rgba(249,91,143,0.4);
+}
+
+/* Toast feedback */
+.cart-toast{
+  position:fixed;
+  bottom:30px;
+  left:50%;
+  transform:translateX(-50%) translateY(100px);
+  background:#1e1e1e;
+  color:#ffffff;
+  padding:12px 24px;
+  border-radius:999px;
+  font-size:1.3rem;
+  font-weight:500;
+  font-family:'Poppins', sans-serif;
+  box-shadow:0 8px 24px rgba(0,0,0,0.25);
+  display:flex;
+  align-items:center;
+  gap:10px;
+  z-index:1050;
+  opacity:0;
+  pointer-events:none;
+  transition:transform .35s cubic-bezier(0.16, 1, 0.3, 1), opacity .35s ease;
+}
+
+.cart-toast.show{
+  transform:translateX(-50%) translateY(0);
+  opacity:1;
+}
+
+.cart-toast i{
+  color:#10b981;
+}
+
+@media(max-width:480px){
+  .cart-drawer{
+    width:100vw;
+    max-width:100%;
+  }
+
+  .cart-header{
+    padding:16px;
+  }
+
+  .cart-footer{
+    padding:14px 16px 18px;
+  }
+
+  .cart-item-name{
+    font-size:1.35rem;
+  }
+
+  .btn-cart-checkout{
+    font-size:1.35rem;
+    padding:12px 16px;
+  }
+
+  .btn-cart-whatsapp{
+    font-size:1.25rem;
+    padding:11px 16px;
+  }
 }

@@ -19,6 +19,10 @@ Route::get('/acicu', function(){
     return view('acicu');
 });
 
+Route::get('/checkout', function(){
+    return view('checkout');
+});
+
 Route::prefix('{current_team}')
     ->middleware(['auth', 'verified', EnsureTeamMembership::class])
     ->group(function () {
